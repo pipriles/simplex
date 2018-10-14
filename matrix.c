@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <math.h>
 
 #include "matrix.h"
 
@@ -171,12 +172,23 @@ Matrix adjointMatrix(Matrix m){
 	return transpose(cofactors);
 }
 
-Matrix inverse(Matrix m){
+Matrix inverse(Matrix m) {
 
 	Matrix adjoint = adjointMatrix(m), inv;
 	MTYPE det = determinant(m);
 
-	inv = kproduct(adjoint,1.0/det);
+	inv = kproduct(adjoint, 1.0/det);
 	freeMatrix(&adjoint);
+
 	return inv;
 }
+
+void truncate(Matrix *m) {
+
+	double t = 0.0001;
+	unsigned int i, size = m->w * m->h;
+
+	for (i=0; i < size; i++)
+		if ( fabs(m->loc[i]) < t ) m->loc[i] = 0;
+}
+

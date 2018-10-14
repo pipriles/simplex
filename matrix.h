@@ -16,6 +16,7 @@ void  setAt(Matrix *, int, int, MTYPE);
 void sliceAt(Matrix, Matrix, int, int);
 
 void printMatrix(Matrix);
+void truncate(Matrix *);
 
 /* Matrix operations */
 MTYPE determinant(Matrix);

@@ -4,7 +4,7 @@
 
 BIN   = main
 CC    = gcc
-FLAGS = -Wall -Wextra
+FLAGS = -lm -Wall -Wextra
 
 all:
 	$(CC) -o $(BIN) main.c matrix.c $(FLAGS)

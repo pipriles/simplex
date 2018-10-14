@@ -4,7 +4,7 @@
 
 int main() {
 
-	Matrix B,b;
+	Matrix B, b, r;
 
 	initMatrix(&B, 4, 4);
 	initMatrix(&b, 3, 3);
@@ -34,10 +34,14 @@ int main() {
 	setAt(&B, 3, 2, 0);
 	setAt(&B, 3, 3, 1);
 
-	printMatrix(inverse(B));
+	r = inverse(B);
+	truncate(&r);
+
+	printMatrix(r);
 
 	freeMatrix(&b);
 	freeMatrix(&B);
+	freeMatrix(&r);
 
 	return 0;
 }
