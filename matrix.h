@@ -16,4 +16,8 @@ void  setAt(Matrix *, int, int, MTYPE);
 
 void printMatrix(Matrix);
 
+/* Matrix operations */
+Matrix product(Matrix, Matrix);
+
 #endif
+
