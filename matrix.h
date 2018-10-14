@@ -16,4 +16,10 @@ void  setAt(Matrix *, int, int, MTYPE);
 
 void printMatrix(Matrix);
 
+MTYPE determinant(Matrix);
+void sliceAt(Matrix, Matrix, int, int);
+
+Matrix minorsMatrix(Matrix);
+Matrix cofactorsMatrix(Matrix);
+
 #endif
