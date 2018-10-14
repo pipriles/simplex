@@ -162,3 +162,20 @@ Matrix kproduct(Matrix m, MTYPE k) {
 	return r;
 }
 
+Matrix adjointMatrix(Matrix m){
+
+	Matrix cofactors;
+
+	cofactors = cofactorsMatrix(m);
+	return transpose(cofactors);
+}
+
+Matrix inverse(Matrix m){
+
+	Matrix adjoint = adjointMatrix(m), inv;
+	MTYPE det = determinant(m);
+
+	inv = kproduct(adjoint,1.0/det);
+	freeMatrix(&adjoint);
+	return inv;
+}

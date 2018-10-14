@@ -20,11 +20,13 @@ void printMatrix(Matrix);
 /* Matrix operations */
 MTYPE determinant(Matrix);
 
+Matrix inverse(Matrix);
 Matrix product(Matrix, Matrix);
 Matrix kproduct(Matrix, MTYPE);
 Matrix transpose(Matrix);
 Matrix minorsMatrix(Matrix);
 Matrix cofactorsMatrix(Matrix);
+Matrix adjointMatrix(Matrix);
 
 #endif
 
