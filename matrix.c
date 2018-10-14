@@ -120,14 +120,15 @@ Matrix minorsMatrix(Matrix m){
 Matrix cofactorsMatrix(Matrix m){
 
 	Matrix minors, cofactors;
-	int mult = -1;
+	int mult;
 
 	minors = minorsMatrix(m);
 	initMatrix(&cofactors,minors.h,minors.w);
 
 	for(int i=0; i < minors.h; i++) {
 		for(int j=0; j < minors.w; j++) {
-			mult *= -1;
+			if((i+j)%2 == 0) mult = 1;
+			else mult = -1;
 			setAt(&cofactors,i,j,mult * getAt(minors,i,j));
 		}
 	}

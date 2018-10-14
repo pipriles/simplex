@@ -4,28 +4,40 @@
 
 int main() {
 
-	Matrix m,inv;
+	Matrix B,b;
 
-	initMatrix(&m, 3, 3);
+	initMatrix(&B, 4, 4);
+	initMatrix(&b, 3, 3);
 
-	setAt(&m, 0, 0, 3);
-	setAt(&m, 0, 1, 0);
-	setAt(&m, 0, 2, 2);
+	setAt(&b, 0, 0, 24);
+	setAt(&b, 0, 1, 6);
+	setAt(&b, 0, 2, 1);
+	setAt(&b, 0, 3, 2);
 
-	setAt(&m, 1, 0, 2);
-	setAt(&m, 1, 1, 0);
-	setAt(&m, 1, 2, -2);
+	setAt(&B, 0, 0, 1);
+	setAt(&B, 0, 1, 0);
+	setAt(&B, 0, 2, 0);
+	setAt(&B, 0, 3, 0);
 
-	setAt(&m, 2, 0, 0);
-	setAt(&m, 2, 1, 1);
-	setAt(&m, 2, 2, 1);
+	setAt(&B, 1, 0, 0);
+	setAt(&B, 1, 1, 1);
+	setAt(&B, 1, 2, 0);
+	setAt(&B, 1, 3, 0);
 
-	inv = inverse(m);
+	setAt(&B, 2, 0, 0);
+	setAt(&B, 2, 1, 0);
+	setAt(&B, 2, 2, 1);
+	setAt(&B, 2, 3, 0);
 
-	printMatrix(inv);
+	setAt(&B, 3, 0, 0);
+	setAt(&B, 3, 1, 0);
+	setAt(&B, 3, 2, 0);
+	setAt(&B, 3, 3, 1);
 
-	freeMatrix(&m);
-	freeMatrix(&inv);
+	printMatrix(inverse(B));
+
+	freeMatrix(&b);
+	freeMatrix(&B);
 
 	return 0;
 }
