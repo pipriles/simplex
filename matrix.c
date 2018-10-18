@@ -4,7 +4,7 @@
 
 #include "matrix.h"
 
-void initMatrix(Matrix *m, int h, int w) {
+void initMatrix(Matrix *m, size_t h, size_t w) {
 	/* Should use malloc + memset or calloc? */
 	m->loc = (MTYPE *) malloc(w * h * sizeof(MTYPE));
 	m->w = w;
@@ -17,18 +17,18 @@ void freeMatrix(Matrix *m) {
 	m->h = 0;
 }
 
-MTYPE getAt(Matrix m, int i, int j) {
+MTYPE getAt(Matrix m, size_t i, size_t j) {
 	return m.loc[i*m.w + j];
 }
 
-void setAt(Matrix *m, int i, int j, MTYPE value) {
+void setAt(Matrix *m, size_t i, size_t j, MTYPE value) {
 	m->loc[i*m->w + j] = value;
 }
 
 /* Print matrix */
 void printMatrix(Matrix m) {
-	for (int i=0; i < m.h; i++) {
-		for (int j=0; j < m.w; j++) {
+	for (size_t i=0; i < m.h; i++) {
+		for (size_t j=0; j < m.w; j++) {
 			printf(" %.4f", getAt(m, i, j));
 		} printf("\n");
 	}
@@ -37,10 +37,10 @@ void printMatrix(Matrix m) {
 Matrix product(Matrix m1, Matrix m2) {
 
 	Matrix r;
-	unsigned int i = 0, j = 0, k = 0;
-	unsigned int h = m1.h;
-	unsigned int w = m2.w;
-	unsigned int s = m2.h;
+	size_t i = 0, j = 0, k = 0;
+	size_t h = m1.h;
+	size_t w = m2.w;
+	size_t s = m2.h;
 
 	if (m1.w != m2.h) {
 		printf("Can't compute product!");
@@ -69,7 +69,7 @@ MTYPE determinant(Matrix m){
 	if(m.w == 1) return getAt(m,0,0);
 
 	initMatrix(&nMatx,m.h-1,m.w-1);
-	for(int j = 0; j < m.w; j++){
+	for(size_t j = 0; j < m.w; j++){
 		sliceAt(m, nMatx,0,j);
 		mult *= -1;
 		val +=  mult * getAt(m,0,j) * determinant(nMatx);
@@ -80,12 +80,12 @@ MTYPE determinant(Matrix m){
 
 }
 
-void sliceAt(Matrix m, Matrix nMatx, int is, int js){
+void sliceAt(Matrix m, Matrix nMatx, size_t is, size_t js){
 
-	int ni = 0,nj = 0;
-	for(int i = 0; i < m.h; i++){
+	size_t ni = 0,nj = 0;
+	for(size_t i = 0; i < m.h; i++){
 		if(is != i){
-			for(int j = 0; j < m.w; j++){
+			for(size_t j = 0; j < m.w; j++){
 				if(js != j){
 					setAt(&nMatx,ni,nj,getAt(m,i,j));
 					nj++;
@@ -106,8 +106,8 @@ Matrix minorsMatrix(Matrix m){
 
 	initMatrix(&nMatx,m.h-1,m.w-1);
 	initMatrix(&minors,m.h,m.w);
-	for(int i=0; i < m.h; i++) {
-		for(int j=0; j < m.w; j++) {
+	for(size_t i=0; i < m.h; i++) {
+		for(size_t j=0; j < m.w; j++) {
 			sliceAt(m,nMatx,i,j);
 			setAt(&minors,i,j,determinant(nMatx));
 		}
@@ -125,8 +125,8 @@ Matrix cofactorsMatrix(Matrix m){
 	minors = minorsMatrix(m);
 	initMatrix(&cofactors,minors.h,minors.w);
 
-	for(int i=0; i < minors.h; i++) {
-		for(int j=0; j < minors.w; j++) {
+	for(size_t i=0; i < minors.h; i++) {
+		for(size_t j=0; j < minors.w; j++) {
 			if((i+j)%2 == 0) mult = 1;
 			else mult = -1;
 			setAt(&cofactors,i,j,mult * getAt(minors,i,j));
@@ -142,8 +142,8 @@ Matrix transpose(Matrix m) {
 	Matrix r;
 	initMatrix(&r, m.w, m.h);
 
-	for (int i=0; i < m.h; i++) 
-		for (int j=0; j < m.w; j++)
+	for (size_t i=0; i < m.h; i++) 
+		for (size_t j=0; j < m.w; j++)
 			setAt(&r, j, i, getAt(m, i, j));
 
 	return r;
@@ -152,9 +152,9 @@ Matrix transpose(Matrix m) {
 Matrix kproduct(Matrix m, MTYPE k) {
 
 	Matrix r;
-	unsigned int h = m.h;
-	unsigned int w = m.w;
-	unsigned int i;
+	size_t h = m.h;
+	size_t w = m.w;
+	size_t i;
 
 	initMatrix(&r, m.h, m.w);
 	for (i=0; i < h*w; i++)
@@ -185,7 +185,7 @@ Matrix inverse(Matrix m) {
 void truncate(Matrix *m) {
 
 	double t = 0.0001;
-	unsigned int i, size = m->w * m->h;
+	size_t i, size = m->w * m->h;
 
 	for (i=0; i < size; i++)
 		if ( fabs(m->loc[i]) < t ) m->loc[i] = 0;
@@ -201,10 +201,29 @@ Matrix substract(Matrix a, Matrix b){
 		exit(1);
 	}
 
-	for (int i=0; i < a.h; i++) 
-		for (int j=0; j < a.w; j++)
-			setAt(&s,i,j,getAt(a,i,j) - getAt(b,i,j));
+	for (size_t i=0; i < a.h; i++) 
+		for (size_t j=0; j < a.w; j++)
+			setAt(&s, i, j, getAt(a,i,j) - getAt(b,i,j));
 
 	return s;
 }	
+
+Matrix fromColumns(Matrix m, size_t *v, size_t n) {
+
+	size_t index;
+	Matrix new;
+	MTYPE value;
+
+	initMatrix(&new, m.h, n);
+
+	for (size_t i=0; i < n; i++)
+		for (size_t j=0; j < m.h; j++) {
+			index = v[i];
+			value = getAt(m, j, index);
+			setAt(&new, j, i, value);
+		}
+
+	return new;
+}
+
 
