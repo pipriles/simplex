@@ -6,9 +6,15 @@
 
 void initMatrix(Matrix *m, int h, int w) {
 	/* Should use malloc + memset or calloc? */
-	m->loc = (MTYPE*) malloc(w * h * sizeof(MTYPE));
+	m->loc = (MTYPE *) malloc(w * h * sizeof(MTYPE));
 	m->w = w;
 	m->h = h;
+}
+
+void initVector(Vector *v, int n) {
+	v->loc = (MTYPE *) malloc(n * sizeof(MTYPE));
+	v->w = n;
+	v->h = 1;
 }
 
 void freeMatrix(Matrix *m) {
@@ -25,12 +31,11 @@ void setAt(Matrix *m, int i, int j, MTYPE value) {
 	m->loc[i*m->w + j] = value;
 }
 
-
 /* Print matrix */
 void printMatrix(Matrix m) {
 	for (int i=0; i < m.h; i++) {
 		for (int j=0; j < m.w; j++) {
-			printf(" %.1f", getAt(m, i, j));
+			printf(" %.4f", getAt(m, i, j));
 		} printf("\n");
 	}
 }
