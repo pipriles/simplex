@@ -191,3 +191,20 @@ void truncate(Matrix *m) {
 		if ( fabs(m->loc[i]) < t ) m->loc[i] = 0;
 }
 
+Matrix substract(Matrix a, Matrix b){
+
+	Matrix s;
+	initMatrix(&s, a.w, a.h);
+
+	if (a.w != b.w && a.h != b.h) {
+		printf("Can't compute sunbstract!");
+		exit(1);
+	}
+
+	for (int i=0; i < a.h; i++) 
+		for (int j=0; j < a.w; j++)
+			setAt(&s,i,j,getAt(a,i,j) - getAt(b,i,j));
+
+	return s;
+}	
+

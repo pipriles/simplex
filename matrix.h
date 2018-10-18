@@ -23,6 +23,7 @@ void truncate(Matrix *);
 /* Matrix operations */
 MTYPE determinant(Matrix);
 
+Matrix substract(Matrix, Matrix);
 Matrix inverse(Matrix);
 Matrix product(Matrix, Matrix);
 Matrix kproduct(Matrix, MTYPE);
