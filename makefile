@@ -4,10 +4,11 @@
 
 BIN   = main
 CC    = gcc
+LIB   = matrix.c simplex.c
 FLAGS = -lm -Wall -Wextra
 
 all:
-	$(CC) -o $(BIN) main.c matrix.c $(FLAGS)
+	$(CC) -o $(BIN) main.c $(LIB) $(FLAGS)
 
 run: all
 	./$(BIN)
