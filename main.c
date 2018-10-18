@@ -4,39 +4,41 @@
 
 int main() {
 
-	Matrix B, r;
-	size_t cols[] = { 0, 3 };
+	Matrix G;
 
-	initMatrix(&B, 4, 4);
+	initMatrix(&G, 6, 4);
 
-	setAt(&B, 0, 0, 1);
-	setAt(&B, 0, 1, 0);
-	setAt(&B, 0, 2, 0);
-	setAt(&B, 0, 3, 0);
+	setAt(&G, 0, 0, 1);
+	setAt(&G, 0, 1, 0);
+	setAt(&G, 0, 2, 0);
+	setAt(&G, 0, 3, 0);
 
-	setAt(&B, 1, 0, 0);
-	setAt(&B, 1, 1, 1);
-	setAt(&B, 1, 2, 0);
-	setAt(&B, 1, 3, 0);
+	setAt(&G, 1, 0, 1);
+	setAt(&G, 1, 1, 0);
+	setAt(&G, 1, 2, 0);
+	setAt(&G, 1, 3, 0);
 
-	setAt(&B, 2, 0, 0);
-	setAt(&B, 2, 1, 0);
-	setAt(&B, 2, 2, 1);
-	setAt(&B, 2, 3, 0);
+	setAt(&G, 2, 0, 1);
+	setAt(&G, 2, 1, 0);
+	setAt(&G, 2, 2, 0);
+	setAt(&G, 2, 3, 0);
 
-	setAt(&B, 3, 0, 0);
-	setAt(&B, 3, 1, 0);
-	setAt(&B, 3, 2, 0);
-	setAt(&B, 3, 3, 1);
+	setAt(&G, 3, 0, 0);
+	setAt(&G, 3, 1, 1);
+	setAt(&G, 3, 2, 0);
+	setAt(&G, 3, 3, 0);
 
-	// r = inverse(B);
-	// truncate(&r);
-	
-	r = fromColumns(B, cols, 2);
-	printMatrix(r);
+	setAt(&G, 4, 0, 0);
+	setAt(&G, 4, 1, 0);
+	setAt(&G, 4, 2, 1);
+	setAt(&G, 4, 3, 0);
 
-	freeMatrix(&B);
-	freeMatrix(&r);
+	setAt(&G, 5, 0, 0);
+	setAt(&G, 5, 1, 0);
+	setAt(&G, 5, 2, 0);
+	setAt(&G, 5, 3, 1);
+
+	freeMatrix(&G);
 
 	return 0;
 }
