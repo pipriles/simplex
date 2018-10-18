@@ -11,12 +11,6 @@ void initMatrix(Matrix *m, int h, int w) {
 	m->h = h;
 }
 
-void initVector(Vector *v, int n) {
-	v->loc = (MTYPE *) malloc(n * sizeof(MTYPE));
-	v->w = n;
-	v->h = 1;
-}
-
 void freeMatrix(Matrix *m) {
 	free(m->loc);
 	m->w = 0;

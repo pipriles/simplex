@@ -11,7 +11,6 @@ typedef struct {
 typedef Matrix Vector;
 
 void initMatrix(Matrix *, int, int);
-void initVector(Vector *, int);
 void freeMatrix(Matrix *);
 
 MTYPE getAt(Matrix, int, int);
