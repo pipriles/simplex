@@ -58,6 +58,8 @@ int main() {
 	setAt(&G, 5, 3, 1);
 
 	freeMatrix(&G);
+	freeMatrix(&C);
+	freeMatrix(&b);
 
 	return 0;
 }
