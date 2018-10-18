@@ -6,7 +6,7 @@ int main() {
 
 	Matrix G, C, b;
 
-	initMatrix(&G, 6, 4);
+	initMatrix(&G, 4, 6);
 	initMatrix(&C, 1, 6);
 	initMatrix(&b, 4, 1);
 
