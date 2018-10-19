@@ -4,7 +4,7 @@
 
 Matrix B, Cb;
 
-void initialize(Matrix G);
+void initialize(Matrix G, size_t *, size_t *);
 size_t optimality(Matrix NB, Matrix Binv, Matrix Cnb);
 Matrix oComputation(Matrix NB, Matrix Binv, Matrix Cnb);
 Matrix loadIdentity(size_t s);

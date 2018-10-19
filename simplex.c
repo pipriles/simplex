@@ -58,14 +58,14 @@ Matrix loadIdentity(size_t s){
 
 void simplex(Matrix NB,Matrix Cnb,Matrix b){
 	Matrix Binv;
-	size_t entry;
+	size_t entry, *NBV, *BV;
 
-	initialize(NB);
+	initialize(NB, NBV, BV);
 
 	Binv = inverse(B);
 	entry = optimality(NB,Binv,Cnb);
 	if(entry != -2){
-		
+
 	}
 	else{
 		//imprimir cosas por q termino
@@ -73,12 +73,26 @@ void simplex(Matrix NB,Matrix Cnb,Matrix b){
 	simplexEnd();
 }
 
-void initialize(Matrix NB){
+void initialize(Matrix NB, size_t *NBV, size_t *BV){
+	size_t n = 0;
+
 	initMatrix(&Cb, 1, NB.h);
 	B = loadIdentity(NB.h);
 
 	for(size_t i = 0; i < Cb.w; i++)
 		setAt(&Cb , 0, i, 0);
+
+	NBV = (size_t *) malloc(NB.w * sizeof(size_t));
+	BV = (size_t *) malloc(B.w * sizeof(size_t));
+
+	for(size_t i = 0; i < NB.w; i++){
+		NBV[i] = n;
+		n++;
+	}
+	for(size_t i = 0; i < B.w; i++){
+		BV[i] = n;
+		n++;
+	}
 }
 
 void simplexEnd(){
