@@ -19,7 +19,7 @@ Matrix oComputation(Matrix NB, Matrix Binv, Matrix Cnb){
 	return decition;
 }
 
-size_t optimality(Matrix NB, Matrix Binv, Matrix Cnb){
+long optimality(Matrix NB, Matrix Binv, Matrix Cnb){
 	size_t index;
 	Matrix decition;
 	int finish;
@@ -32,12 +32,11 @@ size_t optimality(Matrix NB, Matrix Binv, Matrix Cnb){
 	else return index;
 }
 
-int finished(MTYPE *array, size_t n){
-	int positive = 1;
+int finished(MTYPE *array, size_t n) {
 
+	int positive = 1;
 	for (size_t i=0; i < n && positive; i++)
 		if (array[i] < 0) positive = 0;
-
 	return positive;
 }
 
@@ -73,25 +72,31 @@ void swap(Matrix NB,Matrix Cnb,size_t *NBV, size_t *BV, size_t entry, size_t exi
 	NBV[entry] = NBV[entry] ^ BV[exit];
 }
 
-void simplex(Matrix NB,Matrix Cnb,Matrix b){
+void simplex(Matrix NB, Matrix Cnb, Matrix b){
+
+	size_t *NBV = NULL, *BV = NULL;
+	long entry;
 	Matrix Binv;
-	size_t entry, *NBV = NULL, *BV = NULL;
 
 	initialize(NB, NBV, BV);
 
 	Binv = inverse(B);
-	entry = optimality(NB,Binv,Cnb);
-	if(entry != -2){
+	entry = optimality(NB, Binv, Cnb);
 
+	if (entry != -2) {
 		swap(NB,Cnb,NBV,BV,entry,1);
 	}
-	else{
+
+	else {
 		//imprimir cosas por q termino
+		//andres estuvo aqui
 	}
+
 	simplexEnd();
 }
 
 void initialize(Matrix NB, size_t *NBV, size_t *BV){
+
 	size_t n = 0;
 
 	initMatrix(&Cb, 1, NB.h);
@@ -101,7 +106,7 @@ void initialize(Matrix NB, size_t *NBV, size_t *BV){
 		setAt(&Cb , 0, i, 0);
 
 	NBV = (size_t *) malloc(NB.w * sizeof(size_t));
-	BV = (size_t *) malloc(B.w * sizeof(size_t));
+	BV  = (size_t *) malloc(B.w * sizeof(size_t));
 
 	for(size_t i = 0; i < NB.w; i++){
 		NBV[i] = n;
@@ -118,9 +123,9 @@ void simplexEnd(){
 	freeMatrix(&B);
 }
 
-size_t minimum(MTYPE *array, size_t n) {
+long minimum(MTYPE *array, size_t n) {
 
-	size_t index = 0;
+	long index = 0;
 
 	if (!array) 
 		return -1;
@@ -130,3 +135,4 @@ size_t minimum(MTYPE *array, size_t n) {
 
 	return index;
 }
+
