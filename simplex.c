@@ -56,9 +56,26 @@ Matrix loadIdentity(size_t s){
 	return identity;
 }
 
+void swap(Matrix NB,Matrix Cnb,size_t *NBV, size_t *BV, size_t entry, size_t exit){
+	MTYPE aux;
+
+	for(size_t i = 0; i < NB.h; i++){
+		aux = getAt(NB,i,entry);
+		setAt(&NB,i,entry,getAt(B,i,exit));
+		setAt(&B,i,exit,aux);
+	}
+	aux = getAt(Cnb,0,entry);
+	setAt(&Cnb,0,entry,getAt(Cb,0,exit));
+	setAt(&Cb,0,entry,aux);
+
+	NBV[entry] = NBV[entry] ^ BV[exit];
+	BV[entry] = NBV[entry] ^ BV[exit];
+	NBV[entry] = NBV[entry] ^ BV[exit];
+}
+
 void simplex(Matrix NB,Matrix Cnb,Matrix b){
 	Matrix Binv;
-	size_t entry, *NBV, *BV;
+	size_t entry, *NBV = NULL, *BV = NULL;
 
 	initialize(NB, NBV, BV);
 
@@ -66,6 +83,7 @@ void simplex(Matrix NB,Matrix Cnb,Matrix b){
 	entry = optimality(NB,Binv,Cnb);
 	if(entry != -2){
 
+		swap(NB,Cnb,NBV,BV,entry,1);
 	}
 	else{
 		//imprimir cosas por q termino

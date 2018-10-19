@@ -12,6 +12,7 @@ void simplex(Matrix NB,Matrix Cnb,Matrix b);
 void simplexEnd();
 size_t minimum(MTYPE *array, size_t n);
 int finished(MTYPE *array, size_t n);
+void swap(Matrix NB,Matrix Cnb,size_t *NBV, size_t *BV, size_t entry, size_t exit);
 
 #endif
 
