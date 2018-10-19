@@ -70,10 +70,9 @@ void swap(Matrix NB, Matrix Cnb,
 	setAt(&Cnb,0,entry,getAt(Cb,0,exit));
 	setAt(&Cb,0,exit,aux);
 
-	/*printf("%zu\n", NBV[0]);
 	NBV[entry] = NBV[entry] ^ BV[exit];
 	BV[exit]   = NBV[entry] ^ BV[exit];
-	NBV[entry] = NBV[entry] ^ BV[exit];*/
+	NBV[entry] = NBV[entry] ^ BV[exit];
 }
 
 void simplex(Matrix NB, Matrix Cnb, Matrix b){
@@ -100,12 +99,19 @@ void simplex(Matrix NB, Matrix Cnb, Matrix b){
 		// Index from the basis 
 		leave = feasibility(Xb, BP);
 		//printf(" %li", leave);
-		//swap(NB,Cnb,NBV,BV,entry,leave);
 		//printMatrix(B);
 
 		freeMatrix(&Xb);
 		freeMatrix(&BP);
 		freeMatrix(&Pi);
+
+		swap(NB, Cnb, NBV, BV, entry, leave);
+
+		printf("NO BASE:\n");
+		printMatrix(NB);
+		
+		printf("\nBASE:\n");
+		printMatrix(B);
 	}
 
 	else {
@@ -158,21 +164,10 @@ void initialize(Matrix NB, size_t **NBV, size_t **BV){
 		setAt(&Cb , 0, i, 0);	
 
 	*NBV = (size_t *) malloc(NB.w * sizeof(size_t));
-	*BV  = (size_t *) malloc(B.w * sizeof(size_t));
+	*BV  = (size_t *) malloc(B.w  * sizeof(size_t));
 
-	*(BV)[3] = 0;
-	printf("%zu\n", *(BV)[2]);
-
-	for(size_t i = 0; i < NB.w; i++){
-		printf("%zu\n", i);
-		*(NBV)[i] = n;
-		n++;
-	}
-	for(size_t i = 0; i < B.w; i++){
-		/**(BV)[i] = n;
-		n++;*/
-		printf("%zu\n", i);
-	}
+	for(size_t i = 0; i < NB.w; i++) (*NBV)[i] = n++;
+	for(size_t i = 0; i < B.w; i++)  (*BV)[i] = n++;
 }
 
 void simplexEnd(){
