@@ -40,10 +40,10 @@ int main() {
 	freeMatrix(&b);
 
 
-	MTYPE v[] = { -99, 44.5, -2, -100 };
-	MTYPE *found = NULL;
-	found = minimum(v, 4);
-	printf("%f", *found);
+	MTYPE arr[] = { -99, 44.5, -2, -100 };
+	size_t index = -1;
+	index = minimum(arr, 4);
+	printf("%f", arr[index]);
 
 	return 0;
 }
