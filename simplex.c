@@ -20,10 +20,20 @@ void loadIdentity(size_t s){
 	return identity;
 }
 
+void simplex(Matrix NB,Matrix Cn,Matrix b){
+	initialize()
+	simplexEnd()
+}
+
 void initialize(Matrix NB){
 	initMatrix(&Cb, 1, NB.h);
 	B = loadIdentity(NB.h);
 
 	for(int i = 0; i < Cb.w; i++)
 		setAt(&Cb , 0, i, 0);
+}
+
+void simplexEnd(){
+	freeMatrix(&Cb);
+	freeMatrix(&B);
 }
