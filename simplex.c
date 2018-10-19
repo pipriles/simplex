@@ -24,7 +24,7 @@ long optimality(Matrix NB, Matrix Binv, Matrix Cnb){
 
 	size_t index;
 	Matrix decition;
-	int finish;
+	bool finish;
 
 	decition = oComputation(NB,Binv,Cnb);
 	index = minimum(decition.loc, decition.w);
@@ -34,12 +34,11 @@ long optimality(Matrix NB, Matrix Binv, Matrix Cnb){
 	else return index;
 }
 
-int finished(MTYPE *array, size_t n) {
-
-	int positive = 1;
-	for (size_t i=0; i < n && positive; i++)
-		if (array[i] < 0) positive = 0;
-	return positive;
+bool finished(MTYPE *array, size_t n) {
+	bool cond = true;
+	for (size_t i=0; i < n && cond; i++)
+		if (array[i] < 0) cond = false;
+	return cond;
 }
 
 Matrix loadIdentity(size_t s){

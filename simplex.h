@@ -1,6 +1,12 @@
 #ifndef _SIMPLEX_H_
 #define _SIMPLEX_H_
+
 #include "matrix.h"
+
+#define true 1
+#define false 0
+
+typedef short bool;
 
 Matrix B, Cb;
 
@@ -17,7 +23,7 @@ long optimality(Matrix, Matrix, Matrix);
 long feasibility(Vector, Vector);
 long minimum(MTYPE *, size_t);
 
-int finished(MTYPE *, size_t);
+bool finished(MTYPE *, size_t);
 
 #endif
 
