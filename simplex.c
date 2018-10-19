@@ -70,9 +70,10 @@ void swap(Matrix NB, Matrix Cnb,
 	setAt(&Cnb,0,entry,getAt(Cb,0,exit));
 	setAt(&Cb,0,exit,aux);
 
+	/*printf("%zu\n", NBV[0]);
 	NBV[entry] = NBV[entry] ^ BV[exit];
 	BV[exit]   = NBV[entry] ^ BV[exit];
-	NBV[entry] = NBV[entry] ^ BV[exit];
+	NBV[entry] = NBV[entry] ^ BV[exit];*/
 }
 
 void simplex(Matrix NB, Matrix Cnb, Matrix b){
@@ -82,20 +83,15 @@ void simplex(Matrix NB, Matrix Cnb, Matrix b){
 
 	Matrix Binv, Xb, BP, Pi;
 
-	// I dunno what this do
-	initialize(NB, NBV, BV);
+	initialize(NB, &NBV, &BV);
 
 	Binv = inverse(B);
 	truncate(&Binv);
 
 	/* Optimality computations */
 	entry = optimality(NB, Binv, Cnb);
-	printf("%ld\n", entry);
 
 	if (entry != -2) {
-		// Segmetation fault here!
-		// swap(NB,Cnb,NBV,BV,entry,1);
-
 		// Compute parameters for feasibility
 		Xb = product(Binv, b);
 		Pi = fromColumns(NB, (size_t *) &entry, 1);
@@ -103,7 +99,9 @@ void simplex(Matrix NB, Matrix Cnb, Matrix b){
 
 		// Index from the basis 
 		leave = feasibility(Xb, BP);
-		printf(" %li", leave);
+		//printf(" %li", leave);
+		//swap(NB,Cnb,NBV,BV,entry,leave);
+		//printMatrix(B);
 
 		freeMatrix(&Xb);
 		freeMatrix(&BP);
@@ -112,10 +110,12 @@ void simplex(Matrix NB, Matrix Cnb, Matrix b){
 
 	else {
 		//imprimir cosas por q termino
-		//andres estuvo aqui
 	}
 
 	freeMatrix(&Binv);
+	simplexEnd();
+	free(NBV);
+	free(BV);
 }
 
 long feasibility(Vector Xb, Vector BP) {
@@ -138,36 +138,40 @@ long feasibility(Vector Xb, Vector BP) {
 	leave = minimum(choices, cont);
 
 	// Debug
-	printf("MIN: %f\n", choices[leave]);
-	printf("LEAVING: %li\n", leave);
+	//printf("MIN: %f\n", choices[leave]);
+	//printf("LEAVING: %li\n", leave);
 	printf("\n");
-	printMatrix(BP);
+	//printMatrix(BP);
 
 	/* -------------------- */
 
 	return leave;
 }
 
-void initialize(Matrix NB, size_t *NBV, size_t *BV){
+void initialize(Matrix NB, size_t **NBV, size_t **BV){
 
 	size_t n = 0;
-
 	initMatrix(&Cb, 1, NB.h);
 	B = loadIdentity(NB.h);
 
 	for(size_t i = 0; i < Cb.w; i++)
-		setAt(&Cb , 0, i, 0);
+		setAt(&Cb , 0, i, 0);	
 
-	NBV = (size_t *) malloc(NB.w * sizeof(size_t));
-	BV  = (size_t *) malloc(B.w * sizeof(size_t));
+	*NBV = (size_t *) malloc(NB.w * sizeof(size_t));
+	*BV  = (size_t *) malloc(B.w * sizeof(size_t));
+
+	*(BV)[3] = 0;
+	printf("%zu\n", *(BV)[2]);
 
 	for(size_t i = 0; i < NB.w; i++){
-		NBV[i] = n;
+		printf("%zu\n", i);
+		*(NBV)[i] = n;
 		n++;
 	}
 	for(size_t i = 0; i < B.w; i++){
-		BV[i] = n;
-		n++;
+		/**(BV)[i] = n;
+		n++;*/
+		printf("%zu\n", i);
 	}
 }
 

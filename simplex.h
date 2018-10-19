@@ -4,7 +4,7 @@
 
 Matrix B, Cb;
 
-void initialize(Matrix, size_t *, size_t *);
+void initialize(Matrix, size_t **, size_t **);
 void simplex(Matrix, Matrix, Matrix);
 void simplexEnd();
 
