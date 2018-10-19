@@ -44,7 +44,6 @@ int finished(MTYPE *array, size_t n) {
 
 Matrix loadIdentity(size_t s){
 	Matrix identity;
-
 	initMatrix(&identity, s, s);
 
 	for(size_t i = 0; i < s; i++){
@@ -57,7 +56,9 @@ Matrix loadIdentity(size_t s){
 	return identity;
 }
 
-void swap(Matrix NB,Matrix Cnb,size_t *NBV, size_t *BV, size_t entry, size_t exit){
+void swap(Matrix NB, Matrix Cnb, 
+		size_t *NBV, size_t *BV, size_t entry, size_t exit) {
+
 	MTYPE aux;
 
 	for(size_t i = 0; i < NB.h; i++){
@@ -117,7 +118,7 @@ void simplex(Matrix NB, Matrix Cnb, Matrix b){
 	freeMatrix(&Binv);
 }
 
-long feasibility(Matrix Xb, Matrix BP) {
+long feasibility(Vector Xb, Vector BP) {
 
 	/* Feasibility computations */
 
@@ -135,11 +136,13 @@ long feasibility(Matrix Xb, Matrix BP) {
 	}
 
 	leave = minimum(choices, cont);
+
+	// Debug
 	printf("MIN: %f\n", choices[leave]);
 	printf("LEAVING: %li\n", leave);
 	printf("\n");
-
 	printMatrix(BP);
+
 	/* -------------------- */
 
 	return leave;

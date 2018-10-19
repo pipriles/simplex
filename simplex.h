@@ -14,7 +14,7 @@ Matrix oComputation(Matrix, Matrix, Matrix);
 void swap(Matrix, Matrix, size_t *, size_t *, size_t, size_t);
 
 long optimality(Matrix, Matrix, Matrix);
-long feasibility(Matrix, Matrix);
+long feasibility(Vector, Vector);
 long minimum(MTYPE *, size_t);
 
 int finished(MTYPE *, size_t);
