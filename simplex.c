@@ -112,25 +112,31 @@ void simplex(Matrix NB, Matrix Cnb, Matrix b){
 			finish = 1;
 		}
 	}
-	printf("NO BASE:\n");
-	printMatrix(NB);
-			
-	printf("\nBASE:\n");
-	printMatrix(B);
+	if(finish){
+		printf("NO BASE:\n");
+		printMatrix(NB);
+				
+		printf("BASE:\n");
+		printMatrix(B);
 
-	printf("INVERSE:\n");
-	Binv = inverse(B);
-	printMatrix(Binv);
-	Xb = product(Binv,b);
-	printf("VALUES:\n");
-	printMatrix(Xb);
-	printf("COEFICIENTS:\n");
-	printMatrix(Cb);
-	printf("\n");
-	printMatrix(Cnb);
-	printf("OBJECTIVE FUNCTION:\n");
-	z = product(Cb,Xb);
-	printMatrix(z);
+		printf("INVERSE:\n");
+		Binv = inverse(B);
+		printMatrix(Binv);
+		Xb = product(Binv,b);
+		printf("VALUES:\n");
+		printMatrix(Xb);
+		printf("COEFICIENTS:\n");
+		printMatrix(Cb);
+		printMatrix(Cnb);
+		printf("OBJECTIVE FUNCTION:\n");
+		z = product(Cb,Xb);
+		printMatrix(z);
+		printf("VARIABLE ORDER:\n");
+		for(size_t i = 0; i < B.w;i++){
+			printf(" %zu", BV[i]);
+		}
+		printf("\n");
+	}
 
 	freeMatrix(&z);
 	freeMatrix(&Xb);
