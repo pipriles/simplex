@@ -66,10 +66,10 @@ void swap(Matrix NB,Matrix Cnb,size_t *NBV, size_t *BV, size_t entry, size_t exi
 	}
 	aux = getAt(Cnb,0,entry);
 	setAt(&Cnb,0,entry,getAt(Cb,0,exit));
-	setAt(&Cb,0,entry,aux);
+	setAt(&Cb,0,exit,aux);
 
 	NBV[entry] = NBV[entry] ^ BV[exit];
-	BV[entry] = NBV[entry] ^ BV[exit];
+	BV[exit] = NBV[entry] ^ BV[exit];
 	NBV[entry] = NBV[entry] ^ BV[exit];
 }
 
