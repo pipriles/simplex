@@ -7,7 +7,7 @@ int main() {
 	Matrix G, C, b;
 
 	initMatrix(&G, 4, 2);
-	initMatrix(&C, 1, 6);
+	initMatrix(&C, 1, 2);
 	initMatrix(&b, 4, 1);
 
 	setAt(&b, 0, 0, 24);
