@@ -12,7 +12,7 @@ int main() {
 	initMatrix(&C, 1, 2);
 	initMatrix(&b, 4, 1);
 
-	b.loc[0] = -24;
+	b.loc[0] = 24;
 	b.loc[1] = 6;
 	b.loc[2] = 1;
 	b.loc[3] = 2;

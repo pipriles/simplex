@@ -78,45 +78,62 @@ void simplex(Matrix NB, Matrix Cnb, Matrix b){
 
 	size_t *NBV = NULL, *BV = NULL;
 	long entry, leave;
+	int finish = 0;
 
-	Matrix Binv, Xb, BP, Pi;
+	Matrix Binv, Xb, BP, Pi, z;
 
 	initialize(NB, &NBV, &BV);
 
+	while(!finish){
+		Binv = inverse(B);
+		truncate(&Binv);
+
+		/* Optimality computations */
+		entry = optimality(NB, Binv, Cnb);
+
+		if (entry != -2) {
+			// Compute parameters for feasibility
+			Xb = product(Binv, b);
+			Pi = fromColumns(NB, (size_t *) &entry, 1);
+			BP = product(Binv, Pi);
+			// Index from the basis 
+			leave = feasibility(Xb, BP);
+			//printf(" %li", leave);
+			//printMatrix(B);
+
+			freeMatrix(&Xb);
+			freeMatrix(&BP);
+			freeMatrix(&Pi);
+
+			swap(NB, Cnb, NBV, BV, entry, leave);
+
+		}
+		else {
+			finish = 1;
+		}
+	}
+	printf("NO BASE:\n");
+	printMatrix(NB);
+			
+	printf("\nBASE:\n");
+	printMatrix(B);
+
+	printf("INVERSE:\n");
 	Binv = inverse(B);
-	truncate(&Binv);
+	printMatrix(Binv);
+	Xb = product(Binv,b);
+	printf("VALUES:\n");
+	printMatrix(Xb);
+	printf("COEFICIENTS:\n");
+	printMatrix(Cb);
+	printf("\n");
+	printMatrix(Cnb);
+	printf("OBJECTIVE FUNCTION:\n");
+	z = product(Cb,Xb);
+	printMatrix(z);
 
-	/* Optimality computations */
-	entry = optimality(NB, Binv, Cnb);
-
-	if (entry != -2) {
-		// Compute parameters for feasibility
-		Xb = product(Binv, b);
-		Pi = fromColumns(NB, (size_t *) &entry, 1);
-		BP = product(Binv, Pi);
-
-		// Index from the basis 
-		leave = feasibility(Xb, BP);
-		//printf(" %li", leave);
-		//printMatrix(B);
-
-		freeMatrix(&Xb);
-		freeMatrix(&BP);
-		freeMatrix(&Pi);
-
-		swap(NB, Cnb, NBV, BV, entry, leave);
-
-		printf("NO BASE:\n");
-		printMatrix(NB);
-		
-		printf("\nBASE:\n");
-		printMatrix(B);
-	}
-
-	else {
-		//imprimir cosas por q termino
-	}
-
+	freeMatrix(&z);
+	freeMatrix(&Xb);
 	freeMatrix(&Binv);
 	simplexEnd();
 	free(NBV);
