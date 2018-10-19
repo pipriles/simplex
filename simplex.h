@@ -11,12 +11,13 @@ void simplexEnd();
 Matrix loadIdentity(size_t);
 Matrix oComputation(Matrix, Matrix, Matrix);
 
-
 void swap(Matrix, Matrix, size_t *, size_t *, size_t, size_t);
 
 long optimality(Matrix, Matrix, Matrix);
-int finished(MTYPE *, size_t);
+long feasibility(Matrix, Matrix);
 long minimum(MTYPE *, size_t);
+
+int finished(MTYPE *, size_t);
 
 #endif
 

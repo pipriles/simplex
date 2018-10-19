@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
+#include <limits.h>
 
 #include "matrix.h"
 #include "simplex.h"
@@ -20,6 +21,7 @@ Matrix oComputation(Matrix NB, Matrix Binv, Matrix Cnb){
 }
 
 long optimality(Matrix NB, Matrix Binv, Matrix Cnb){
+
 	size_t index;
 	Matrix decition;
 	int finish;
@@ -68,23 +70,43 @@ void swap(Matrix NB,Matrix Cnb,size_t *NBV, size_t *BV, size_t entry, size_t exi
 	setAt(&Cb,0,exit,aux);
 
 	NBV[entry] = NBV[entry] ^ BV[exit];
-	BV[exit] = NBV[entry] ^ BV[exit];
+	BV[exit]   = NBV[entry] ^ BV[exit];
 	NBV[entry] = NBV[entry] ^ BV[exit];
 }
 
 void simplex(Matrix NB, Matrix Cnb, Matrix b){
 
 	size_t *NBV = NULL, *BV = NULL;
-	long entry;
-	Matrix Binv;
+	long entry, leave;
 
+	Matrix Binv, Xb, BP, Pi;
+
+	// I dunno what this do
 	initialize(NB, NBV, BV);
 
 	Binv = inverse(B);
+	truncate(&Binv);
+
+	/* Optimality computations */
 	entry = optimality(NB, Binv, Cnb);
+	printf("%ld\n", entry);
 
 	if (entry != -2) {
-		swap(NB,Cnb,NBV,BV,entry,1);
+		// Segmetation fault here!
+		// swap(NB,Cnb,NBV,BV,entry,1);
+
+		// Compute parameters for feasibility
+		Xb = product(Binv, b);
+		Pi = fromColumns(NB, (size_t *) &entry, 1);
+		BP = product(Binv, Pi);
+
+		// Index from the basis 
+		leave = feasibility(Xb, BP);
+		printf(" %li", leave);
+
+		freeMatrix(&Xb);
+		freeMatrix(&BP);
+		freeMatrix(&Pi);
 	}
 
 	else {
@@ -92,7 +114,35 @@ void simplex(Matrix NB, Matrix Cnb, Matrix b){
 		//andres estuvo aqui
 	}
 
-	simplexEnd();
+	freeMatrix(&Binv);
+}
+
+long feasibility(Matrix Xb, Matrix BP) {
+
+	/* Feasibility computations */
+
+	size_t i, cont, size = Xb.w * Xb.h;
+	long leave = -1;
+	MTYPE choices[size];
+
+	for (i=0, cont=0; i < size; i++) 
+		if ( Xb.loc[i] >= 0 && BP.loc[i] > 0 )
+			choices[cont++] = Xb.loc[i] / BP.loc[i];
+
+	if (cont <= 0) {
+		printf("QUE NOOOOOOO, PORROS NO!!!!!!!");
+		exit(1);
+	}
+
+	leave = minimum(choices, cont);
+	printf("MIN: %f\n", choices[leave]);
+	printf("LEAVING: %li\n", leave);
+	printf("\n");
+
+	printMatrix(BP);
+	/* -------------------- */
+
+	return leave;
 }
 
 void initialize(Matrix NB, size_t *NBV, size_t *BV){
@@ -135,4 +185,3 @@ long minimum(MTYPE *array, size_t n) {
 
 	return index;
 }
-

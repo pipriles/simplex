@@ -10,6 +10,9 @@ FLAGS = -lm -Wall -Wextra
 all:
 	$(CC) -o $(BIN) main.c $(LIB) $(FLAGS)
 
+debug:
+	$(CC) -g -o $(BIN) main.c $(LIB) $(FLAGS)
+
 run: all
 	./$(BIN)
 
