@@ -194,7 +194,7 @@ void truncate(Matrix *m) {
 Matrix substract(Matrix a, Matrix b){
 
 	Matrix s;
-	initMatrix(&s, a.w, a.h);
+	initMatrix(&s, a.h, a.w);
 
 	if (a.w != b.w && a.h != b.h) {
 		printf("Can't compute sunbstract!");

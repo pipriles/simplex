@@ -5,26 +5,40 @@
 #include "matrix.h"
 #include "simplex.h"
 
-size_t optimality(Matrix NB, Matrix Binv, Matrix Cnb){
-	Matrix O, decition;
-	Matrix zj, Paux;
-	size_t col[1], index;
+Matrix oComputation(Matrix NB, Matrix Binv, Matrix Cnb){
+	Matrix O, decition,zj;
 
 	initMatrix(&decition, 1, NB.w);
 	O = product(Cb,Binv);
 
-	for(size_t i = 0; i < NB.w; i++){
-		col[0] = i;
-		Paux = fromColumns(NB, col, 1);
-		zj = product(O,Paux);
-		setAt(&decition,0,i,getAt(zj, 0, 0) - getAt(Cnb, 0, i));
-		freeMatrix(&zj);
-		freeMatrix(&Paux);
-	}
-	index = minimum(decition.loc, decition.w);
+	zj = product(O,NB);
+	decition = substract(zj,Cnb);
+
 	freeMatrix(&O);
+	freeMatrix(&zj);
+	return decition;
+}
+
+size_t optimality(Matrix NB, Matrix Binv, Matrix Cnb){
+	size_t index;
+	Matrix decition;
+	int finish;
+
+	decition = oComputation(NB,Binv,Cnb);
+	index = minimum(decition.loc, decition.w);
+	finish = finished(decition.loc, decition.w);
 	freeMatrix(&decition);
-	return index;
+	if(finish) return -2;
+	else return index;
+}
+
+int finished(MTYPE *array, size_t n){
+	int positive = 1;
+
+	for (size_t i=0; i < n && positive; i++)
+		if (array[i] < 0) positive = 0;
+
+	return positive;
 }
 
 Matrix loadIdentity(size_t s){
@@ -50,6 +64,12 @@ void simplex(Matrix NB,Matrix Cnb,Matrix b){
 
 	Binv = inverse(B);
 	entry = optimality(NB,Binv,Cnb);
+	if(entry != -2){
+		
+	}
+	else{
+		//imprimir cosas por q termino
+	}
 	simplexEnd();
 }
 
