@@ -78,7 +78,7 @@ void simplex(Matrix NB, Matrix Cnb, Matrix b){
 
 	size_t *NBV = NULL, *BV = NULL;
 	long entry, leave;
-	int finish = 0;
+	bool finish = false;
 
 	Matrix Binv, Xb, BP, Pi, z;
 
@@ -109,16 +109,18 @@ void simplex(Matrix NB, Matrix Cnb, Matrix b){
 
 		}
 		else {
-			finish = 1;
+			finish = true;
 		}
-	}
-	if(finish){
+
 		printf("NO BASE:\n");
 		printMatrix(NB);
 				
 		printf("BASE:\n");
 		printMatrix(B);
+		printf("--------------------\n");
 
+	}
+	if (finish){
 		printf("INVERSE:\n");
 		Binv = inverse(B);
 		printMatrix(Binv);
@@ -152,11 +154,16 @@ long feasibility(Vector Xb, Vector BP) {
 
 	size_t i, cont, size = Xb.w * Xb.h;
 	long leave = -1;
+
+	size_t indexs[size]; // Real index...
 	MTYPE choices[size];
 
 	for (i=0, cont=0; i < size; i++) 
-		if ( Xb.loc[i] >= 0 && BP.loc[i] > 0 )
-			choices[cont++] = Xb.loc[i] / BP.loc[i];
+		if ( Xb.loc[i] >= 0 && BP.loc[i] > 0 ) {
+			indexs[cont]  = i;
+			choices[cont] = Xb.loc[i] / BP.loc[i];
+			cont++;
+		}
 
 	if (cont <= 0) {
 		printf("QUE NOOOOOOO, PORROS NO!!!!!!!");
@@ -166,14 +173,17 @@ long feasibility(Vector Xb, Vector BP) {
 	leave = minimum(choices, cont);
 
 	// Debug
-	//printf("MIN: %f\n", choices[leave]);
-	//printf("LEAVING: %li\n", leave);
-	printf("\n");
-	//printMatrix(BP);
+	// printMatrix(Xb);
+	// printf("\n");
+	// printMatrix(BP);
+	// printf("MIN: %f\n", choices[leave]);
+	// printf("LEAVING: %lu\n", indexs[leave]);
+	// printf("\n");
+	// printMatrix(BP);
 
 	/* -------------------- */
 
-	return leave;
+	return indexs[leave];
 }
 
 void initialize(Matrix NB, size_t **NBV, size_t **BV){

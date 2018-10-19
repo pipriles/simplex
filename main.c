@@ -20,8 +20,8 @@ int main() {
 	C.loc[1] = 50;
 	C.loc[2] = 35;
 
-	setAt(&G, 0, 0, 4);
-	setAt(&G, 1, 0, 2);
+	setAt(&G, 0, 0,  4);
+	setAt(&G, 1, 0,  2);
 	setAt(&G, 2, 0, -4);
 
 	setAt(&G, 0, 1, 3);
@@ -32,6 +32,7 @@ int main() {
 	setAt(&G, 1, 2, 1);
 	setAt(&G, 2, 2, 0);
 
+	printMatrix(G);
 	simplex(G,C,b);
 
 	freeMatrix(&G);
