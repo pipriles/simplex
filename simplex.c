@@ -37,3 +37,17 @@ void simplexEnd(){
 	freeMatrix(&Cb);
 	freeMatrix(&B);
 }
+
+MTYPE* minimum(MTYPE *array, size_t n) {
+
+	MTYPE *found = array;
+
+	if (!array) 
+		return NULL;
+
+	for (size_t i=0; i < n; i++)
+		if (array[i] < *found) found = array + i;
+
+	return found;
+}
+

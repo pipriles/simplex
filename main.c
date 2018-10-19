@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
+
 #include "matrix.h"
+#include "simplex.h"
 
 int main() {
 
@@ -36,6 +38,12 @@ int main() {
 	freeMatrix(&G);
 	freeMatrix(&C);
 	freeMatrix(&b);
+
+
+	MTYPE v[] = { -99, 44.5, -2, -100 };
+	MTYPE *found = NULL;
+	found = minimum(v, 4);
+	printf("%f", *found);
 
 	return 0;
 }
