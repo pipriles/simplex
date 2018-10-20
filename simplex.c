@@ -106,8 +106,8 @@ void simplex(Matrix NB, Matrix Cnb, Matrix b){
 			freeMatrix(&Pi);
 
 			swap(NB, Cnb, NBV, BV, entry, leave);
-
 		}
+
 		else {
 			finish = true;
 		}
