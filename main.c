@@ -12,6 +12,7 @@ void parse_fn() {
 	MTYPE sign = 1; 
 	MTYPE value = 1;
 
+	printf("INGRESA LAS RESTRICCIONES:\n");
 	scanf(" %[^\n]", str);
 	printf("%s\n", str);
 
@@ -47,37 +48,93 @@ void parse_fn() {
 	}
 }
 
+Matrix recoef(){
+	int rest, var;
+	MTYPE c;
+	Matrix G;
+	//codigo marginal, poco tiempo para un parser xD
+	printf("Numero restricciones: ");
+	scanf(" %d", &rest);
+	printf("Numero de variables: ");
+	scanf(" %d", &var);
+
+	initMatrix(&G, rest, var);
+
+	for(int i = 0; i < rest; i++){
+		for(int j = 0; j < var; j++){
+			printf("Ingresa Coeficiente de %d restriccion, %d Variable: ", i+1, j+1);
+			scanf(" %f", &c);
+			setAt(&G, i, j,  c);
+		}
+	}
+	printf("Esta es su matriz: \n");
+	printMatrix(G);
+	return G;
+}
+
+Matrix focoef(size_t var, int *mult){
+	MTYPE c;
+	Matrix C;
+
+	printf("(1)Min\n(2)Max\n?:");
+	scanf(" %d",mult);
+	if(*mult == 1) *mult = -1;
+	else *mult = 1;
+
+	initMatrix(&C, 1, var);
+	for(size_t i = 0; i < var; i++){
+		printf("Ingresa Coeficiente de %zu Variable de la funcion objetivo: ",i+1);
+		scanf(" %f", &c);
+		C.loc[i] = *mult * c;
+	}
+	printf("Esta es su matriz: \n");
+	printMatrix(C);
+	return C;
+}
+
+Matrix rco(size_t rest){
+	Matrix b;
+	MTYPE c;
+	int dec;
+
+	initMatrix(&b, rest, 1);
+	for(size_t i = 0; i < rest; i++){
+		printf("Ingresa %lu Lado derecho de las restricciones: \n", i+1);
+		printf("(1) >=\n(2) <=\n(3) =\n?:");
+		scanf(" %d",&dec);
+		printf("Ingresa el Valor: ");
+		scanf(" %f",&c);
+		if((dec == 1 && c > 0)||dec == 3){
+			//error hay q pedir la base
+			b.w = 0;
+			b.h = 0;
+		}
+		b.loc[i] = c;
+	}
+	printf("Esta es su matriz: \n");
+	printMatrix(b);
+	return b;
+}
+
 int main() {
 
 	Matrix G, C, b;
+	int mult;
 
-	initMatrix(&G, 3, 3);
-	initMatrix(&C, 1, 3);
 	initMatrix(&b, 3, 1);
 
 	b.loc[0] = 240;
 	b.loc[1] = 100;
 	b.loc[2] = 0;
 
-	C.loc[0] = 70;
-	C.loc[1] = 50;
-	C.loc[2] = 35;
-
-	setAt(&G, 0, 0,  4);
-	setAt(&G, 1, 0,  2);
-	setAt(&G, 2, 0, -4);
-
-	setAt(&G, 0, 1, 3);
-	setAt(&G, 1, 1, 1);
-	setAt(&G, 2, 1, 1);
-
-	setAt(&G, 0, 2, 1);
-	setAt(&G, 1, 2, 1);
-	setAt(&G, 2, 2, 0);
-
+	G = recoef();
+	C = focoef(G.w,&mult);
+	b = rco(G.h);
+	if(b.w==0&&b.h==0){
+		//pedir la base y todo como si ya hubiesen hecho dos fases
+	}
 	// printMatrix(G);
-	// simplex(G,C,b);
-	ask_objective();
+	simplex(G,C,b,mult);
 
 	freeMatrix(&G);
 	freeMatrix(&C);

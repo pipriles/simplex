@@ -74,7 +74,7 @@ void swap(Matrix NB, Matrix Cnb,
 	NBV[entry] = NBV[entry] ^ BV[exit];
 }
 
-void simplex(Matrix NB, Matrix Cnb, Matrix b){
+void simplex(Matrix NB, Matrix Cnb, Matrix b, int mult){
 
 	size_t *NBV = NULL, *BV = NULL;
 	long entry, leave;
@@ -132,7 +132,7 @@ void simplex(Matrix NB, Matrix Cnb, Matrix b){
 		printMatrix(Cnb);
 		printf("OBJECTIVE FUNCTION:\n");
 		z = product(Cb,Xb);
-		printMatrix(z);
+		printf(" %f\n",z.loc[0]*mult);
 		printf("VARIABLE ORDER:\n");
 		for(size_t i = 0; i < B.w;i++){
 			printf(" %zu", BV[i]);
