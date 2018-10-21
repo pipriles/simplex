@@ -82,8 +82,8 @@ void simplex(Matrix NB, Matrix Cnb, Matrix b, Matrix fB, int mult){
 
 	Matrix Binv, Xb, BP, Pi, z;
 
-	initialize(NB, &NBV, &BV);
 	B = fB; // ADKJSDJALKSD
+	initialize(NB, &NBV, &BV);
 
 	while(!finish){
 		Binv = inverse(B);
@@ -108,39 +108,46 @@ void simplex(Matrix NB, Matrix Cnb, Matrix b, Matrix fB, int mult){
 
 			swap(NB, Cnb, NBV, BV, entry, leave);
 		}
-
 		else {
 			finish = true;
 		}
 
-		printf("NO BASE:\n");
+		/*printf("NO BASE:\n");
 		printMatrix(NB);
 				
 		printf("BASE:\n");
 		printMatrix(B);
-		printf("--------------------\n");
+		printf("--------------------\n");*/
 
 	}
 	if (finish){
-		printf("INVERSE:\n");
+		printf("--------------------\n");
 		Binv = inverse(B);
-		printMatrix(Binv);
 		Xb = product(Binv,b);
-		printf("VALUES:\n");
-		printMatrix(Xb);
-		printf("COEFICIENTS:\n");
-		printMatrix(Cb);
-		printMatrix(Cnb);
-		printf("OBJECTIVE FUNCTION:\n");
 		z = product(Cb,Xb);
-		printf(" %f\n",z.loc[0]*mult);
-		printf("VARIABLE ORDER:\n");
+		printf(" Z = %f\n",z.loc[0]*mult);
 		for(size_t i = 0; i < B.w;i++){
-			printf(" %zu", BV[i]);
+			printf(" X%zu = %f\n", BV[i]+1, Xb.loc[i]);
+		}
+		printf("--------------------\n");
+		Pi = product(Cb,Binv);
+		//printMatrix(Pi);
+		Binv = product(Binv,NB);
+		for(size_t i = 0; i < Binv.h;i++){
+			printf("X%lu = %.2f",BV[i]+1,Xb.loc[i]);
+			for(size_t j = 0; j < Binv.w;j++){
+				printf(" + (%.2fX%lu)",-1 * getAt(Binv,i,j),NBV[j]+1);
+			}
+			printf("\n");
+		}
+		printf("Z = %f",z.loc[0]*mult);
+		for(size_t i = 0; i < Pi.w;i++){
+			printf(" + (%.2fX%lu)",-1 * Pi.loc[i],NBV[i]+1);
 		}
 		printf("\n");
 	}
 
+	freeMatrix(&Pi);
 	freeMatrix(&z);
 	freeMatrix(&Xb);
 	freeMatrix(&Binv);
@@ -191,7 +198,6 @@ void initialize(Matrix NB, size_t **NBV, size_t **BV){
 
 	size_t n = 0;
 	initMatrix(&Cb, 1, NB.h);
-	B = loadIdentity(NB.h);
 
 	for(size_t i = 0; i < Cb.w; i++)
 		setAt(&Cb , 0, i, 0);	
