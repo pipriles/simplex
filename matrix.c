@@ -11,6 +11,18 @@ void initMatrix(Matrix *m, size_t h, size_t w) {
 	m->h = h;
 }
 
+bool isidentity(Matrix m) {
+
+	size_t i, n = m.w;
+	bool ret = true;
+
+	if (m.w != m.h) return false;
+	for (i=0; i < n; i++) 
+		ret = ret && (getAt(m, i, i) == 1);
+
+	return ret;
+}
+
 void freeMatrix(Matrix *m) {
 	free(m->loc);
 	m->w = 0;
@@ -43,6 +55,10 @@ Matrix product(Matrix m1, Matrix m2) {
 	size_t s = m2.h;
 
 	if (m1.w != m2.h) {
+		printf("\n");
+		printMatrix(m1);
+		printf("\n");
+		printMatrix(m2);
 		printf("Can't compute product!");
 		exit(1);
 	}

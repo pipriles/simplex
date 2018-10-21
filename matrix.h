@@ -3,6 +3,11 @@
 
 #define MTYPE float
 
+#define true 1
+#define false 0
+
+typedef short bool;
+
 typedef struct {
 	MTYPE *loc;
 	size_t w, h;

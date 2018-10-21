@@ -19,15 +19,15 @@ void parse_fn() {
 	for (size_t i=0; i < 100; i++) {
 
 		if ((str[i] >= 48 && str[i] <= 57) 
-			|| str[i] == 46) {
+				|| str[i] == 46) {
 			if (!acum) acum = &str[i];
 			length++;
 		}
 
 		else if ((str[i] >= 97 && str[i] <= 122) 
-			|| (str[i] >= 65 && str[i] <= 90)
-			|| (str[i] == '\0')) {
-			
+				|| (str[i] >= 65 && str[i] <= 90)
+				|| (str[i] == '\0')) {
+
 			if (acum != NULL) {
 				strncpy(token, acum, length);
 				value = atof(token);
@@ -118,7 +118,7 @@ Matrix rco(size_t rest){
 
 int main() {
 
-	Matrix G, C, b;
+	Matrix G, C, fB, b;
 	int mult;
 
 	initMatrix(&b, 3, 1);
@@ -130,11 +130,50 @@ int main() {
 	G = recoef();
 	C = focoef(G.w,&mult);
 	b = rco(G.h);
-	if(b.w==0&&b.h==0){
-		//pedir la base y todo como si ya hubiesen hecho dos fases
+
+	fB = loadIdentity(G.h);
+
+	if ( b.w == 0 && b.h == 0 ){
+
+		// pedir la base y todo como si ya hubiesen hecho dos fases
+		MTYPE value; // aqui mismo fue!
+		printf("\nEncontramos un problema en nuestro cerebro sintetico");
+		printf("\nPor favor introduzca una base factible\n");
+
+		for(size_t i=0; i < G.h; i++)
+			for(size_t j=0; j < G.h; j++) {
+				printf("\nIntroduzca valor base %lu %lu: ", i, j);
+				scanf(" %f", &value);
+				setAt(&fB, i, j, value);
+			}
+		
+		// G es la no base (Bello)
+		printf("\nIngrese ahora la no base 2\n");
+		for(size_t i=0; i < G.h; i++) {
+			for(size_t j=0; j < G.w; j++) {
+				printf("Ingresa Coeficiente de %ld restriccion, %ld Variable: ", i+1, j+1);
+				scanf(" %f", &value);
+				setAt(&G, i, j,  value);
+			}
+		}
+
+		printf("\n Segunda vez:\n");
+		for(size_t i=0; i < G.h; i++) {
+			printf("Ingrese valor lado derecho %ld: ", i);
+			scanf(" %f", &value);
+			b.loc[i] = value;
+		} 
+		
+		b.h = G.h;
+		b.w = 1;
+
+		printf("\nSu nueva base es:\n");
+		printMatrix(fB);
+		printf("\n");
 	}
+
 	// printMatrix(G);
-	simplex(G,C,b,mult);
+	simplex(G, C, b, fB, mult);
 
 	freeMatrix(&G);
 	freeMatrix(&C);

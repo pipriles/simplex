@@ -11,7 +11,7 @@ typedef short bool;
 Matrix B, Cb;
 
 void initialize(Matrix, size_t **, size_t **);
-void simplex(Matrix, Matrix, Matrix, int);
+void simplex(Matrix, Matrix, Matrix, Matrix, int);
 void simplexEnd();
 
 Matrix loadIdentity(size_t);

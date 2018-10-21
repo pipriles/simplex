@@ -74,15 +74,16 @@ void swap(Matrix NB, Matrix Cnb,
 	NBV[entry] = NBV[entry] ^ BV[exit];
 }
 
-void simplex(Matrix NB, Matrix Cnb, Matrix b, int mult){
+void simplex(Matrix NB, Matrix Cnb, Matrix b, Matrix fB, int mult){
 
 	size_t *NBV = NULL, *BV = NULL;
-	long entry, leave;
 	bool finish = false;
+	long entry, leave;
 
 	Matrix Binv, Xb, BP, Pi, z;
 
 	initialize(NB, &NBV, &BV);
+	B = fB; // ADKJSDJALKSD
 
 	while(!finish){
 		Binv = inverse(B);
