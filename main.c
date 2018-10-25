@@ -15,7 +15,7 @@ int main() {
 	b.loc[0] = 240;
 	b.loc[1] = 100;
 	b.loc[2] = 0;
-
+	//dskgnsljkn
 	// printMatrix(G);
 	simplex(G, C, b, fB, mult);
 
