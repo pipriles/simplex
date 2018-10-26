@@ -8,18 +8,16 @@
 
 typedef short bool;
 
-Matrix B, Cb;
-
-void initialize(Matrix, size_t **, size_t **);
-void simplex(Matrix, Matrix, Matrix, Matrix, int);
+void initialize(Matrix, Matrix, size_t **, size_t **);
+void simplex(Matrix, Matrix, Matrix, Matrix, Matrix, int);
 void simplexEnd();
 
 Matrix loadIdentity(size_t);
-Matrix oComputation(Matrix, Matrix, Matrix);
+Matrix oComputation(Matrix, Matrix, Matrix, Matrix);
 
-void swap(Matrix, Matrix, size_t *, size_t *, size_t, size_t);
+void swap(Matrix, Matrix, Matrix, Matrix, size_t *, size_t *, size_t, size_t);
 
-long optimality(Matrix, Matrix, Matrix);
+long optimality(Matrix, Matrix, Matrix, Matrix);
 long feasibility(Vector, Vector);
 long minimum(MTYPE *, size_t);
 

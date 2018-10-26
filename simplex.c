@@ -6,7 +6,7 @@
 #include "matrix.h"
 #include "simplex.h"
 
-Matrix oComputation(Matrix NB, Matrix Binv, Matrix Cnb){
+Matrix oComputation(Matrix NB, Matrix Binv, Matrix Cnb, Matrix Cb){
 	Matrix O, decition,zj;
 
 	initMatrix(&decition, 1, NB.w);
@@ -20,13 +20,13 @@ Matrix oComputation(Matrix NB, Matrix Binv, Matrix Cnb){
 	return decition;
 }
 
-long optimality(Matrix NB, Matrix Binv, Matrix Cnb){
+long optimality(Matrix NB, Matrix Binv, Matrix Cnb, Matrix Cb){
 
 	size_t index;
 	Matrix decition;
 	bool finish;
 
-	decition = oComputation(NB,Binv,Cnb);
+	decition = oComputation(NB,Binv,Cnb,Cb);
 	index = minimum(decition.loc, decition.w);
 	finish = finished(decition.loc, decition.w);
 	freeMatrix(&decition);
@@ -55,7 +55,7 @@ Matrix loadIdentity(size_t s){
 	return identity;
 }
 
-void swap(Matrix NB, Matrix Cnb, 
+void swap(Matrix NB, Matrix Cnb, Matrix B, Matrix Cb,
 		size_t *NBV, size_t *BV, size_t entry, size_t exit) {
 
 	MTYPE aux;
@@ -74,7 +74,7 @@ void swap(Matrix NB, Matrix Cnb,
 	NBV[entry] = NBV[entry] ^ BV[exit];
 }
 
-void simplex(Matrix NB, Matrix Cnb, Matrix b, Matrix fB, int mult){
+void simplex(Matrix NB, Matrix Cnb, Matrix B, Matrix Cb, Matrix b, int mult){
 
 	size_t *NBV = NULL, *BV = NULL;
 	bool finish = false;
@@ -82,15 +82,14 @@ void simplex(Matrix NB, Matrix Cnb, Matrix b, Matrix fB, int mult){
 
 	Matrix Binv, Xb, BP, Pi, z;
 
-	B = fB; // ADKJSDJALKSD
-	initialize(NB, &NBV, &BV);
+	initialize(NB, B, &NBV, &BV);
 
 	while(!finish){
 		Binv = inverse(B);
 		truncate(&Binv);
 
 		/* Optimality computations */
-		entry = optimality(NB, Binv, Cnb);
+		entry = optimality(NB, Binv, Cnb, Cb);
 
 		if (entry != -2) {
 			// Compute parameters for feasibility
@@ -106,7 +105,7 @@ void simplex(Matrix NB, Matrix Cnb, Matrix b, Matrix fB, int mult){
 			freeMatrix(&BP);
 			freeMatrix(&Pi);
 
-			swap(NB, Cnb, NBV, BV, entry, leave);
+			swap(NB, Cnb, B, Cb, NBV, BV, entry, leave);
 		}
 		else {
 			finish = true;
@@ -151,7 +150,6 @@ void simplex(Matrix NB, Matrix Cnb, Matrix b, Matrix fB, int mult){
 	freeMatrix(&z);
 	freeMatrix(&Xb);
 	freeMatrix(&Binv);
-	simplexEnd();
 	free(NBV);
 	free(BV);
 }
@@ -194,24 +192,15 @@ long feasibility(Vector Xb, Vector BP) {
 	return indexs[leave];
 }
 
-void initialize(Matrix NB, size_t **NBV, size_t **BV){
+void initialize(Matrix NB, Matrix B, size_t **NBV, size_t **BV){
 
 	size_t n = 0;
-	initMatrix(&Cb, 1, NB.h);
-
-	for(size_t i = 0; i < Cb.w; i++)
-		setAt(&Cb , 0, i, 0);	
 
 	*NBV = (size_t *) malloc(NB.w * sizeof(size_t));
 	*BV  = (size_t *) malloc(B.w  * sizeof(size_t));
 
 	for(size_t i = 0; i < NB.w; i++) (*NBV)[i] = n++;
 	for(size_t i = 0; i < B.w; i++)  (*BV)[i] = n++;
-}
-
-void simplexEnd(){
-	freeMatrix(&Cb);
-	freeMatrix(&B);
 }
 
 long minimum(MTYPE *array, size_t n) {
