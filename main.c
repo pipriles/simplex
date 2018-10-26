@@ -12,15 +12,15 @@ bool readMat(Matrix *C, Matrix *G, Matrix *CB, Matrix *B, Matrix *b, int *mult){
 	char rest, mode[3];
 	bool valid = 1;
 
-  	fp = fopen("matrix.mt", "r");
-  	fscanf(fp, " %[^\n]", mode);
-  	fscanf(fp, " %d", &vn);	
-  	initMatrix(C, 1, vn);
-  	if(strcmp(mode,"min") == 0) *mult = -1;
-  	for(int i = 0; i < vn; i++){
-  		fscanf(fp, " %f", &a);
-  		C->loc[i] = (*mult)*a;
-  	}
+	fp = fopen("matrix.mt", "r");
+	fscanf(fp, " %[^\n]", mode);
+	fscanf(fp, " %d", &vn);	
+	initMatrix(C, 1, vn);
+	if(strcmp(mode,"min") == 0) *mult = -1;
+	for(int i = 0; i < vn; i++){
+		fscanf(fp, " %f", &a);
+		C->loc[i] = (*mult)*a;
+	}
 	fscanf(fp, "%d", &rn);
 	initMatrix(G, rn, vn);
 	for(int i = 0; i < rn; i++){
@@ -32,7 +32,7 @@ bool readMat(Matrix *C, Matrix *G, Matrix *CB, Matrix *B, Matrix *b, int *mult){
 	initMatrix(CB, 1, rn);
 	for(int i = 0; i < rn; i++){
 		fscanf(fp, " %f", &a);
-  		CB->loc[i] = a;
+		CB->loc[i] = a;
 	}
 	initMatrix(B, rn, rn);
 	for(int i = 0; i < rn; i++){
@@ -45,12 +45,12 @@ bool readMat(Matrix *C, Matrix *G, Matrix *CB, Matrix *B, Matrix *b, int *mult){
 	for(int i = 0; i < rn; i++){
 		fscanf(fp, " %c", &rest);
 		fscanf(fp, " %f", &a);
-  		b->loc[i] = a;
-  		if((rest == '>' && a > 0)|| rest == '=') valid = 0;
+		b->loc[i] = a;
+		if((rest == '>' && a > 0)|| rest == '=') valid = 0;
 	}
-   	fclose(fp);
+	fclose(fp);
 
-   	return valid;
+	return valid;
 }
 
 int main() {
@@ -61,10 +61,10 @@ int main() {
 
 	valid = readMat(&C,&G,&CB,&B,&b,&mult);
 	if(valid){
-		simplex(G,C,B,CB,b,mult);
+		simplex(G, C, B, CB, b, mult);
 	}
-	else{
-		printf("Mi Cerebro de peruano no sabe q hacer..\n");
+	else {
+		printf("Por favor ingrese una base inicial factible!");
 	}
 
 	freeMatrix(&G);

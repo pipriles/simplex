@@ -172,7 +172,7 @@ long feasibility(Vector Xb, Vector BP) {
 		}
 
 	if (cont <= 0) {
-		printf("QUE NOOOOOOO, PORROS NO!!!!!!!");
+		printf("STOP! El problema es no acotado");
 		exit(1);
 	}
 
