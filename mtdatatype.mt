@@ -1,3 +1,4 @@
+#min or max
 #Number of Variables (No including excess or holgurs xD)
 #Z coeficients of variables separated by spaces
 #Number of restriccions

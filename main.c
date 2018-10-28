@@ -5,16 +5,20 @@
 #include "matrix.h"
 #include "simplex.h"
 
-bool readMat(Matrix *C, Matrix *G, Matrix *CB, Matrix *B, Matrix *b, int *mult){
+bool readMat(Matrix *C, Matrix *G, Matrix *CB, Matrix *B, Matrix *b, 
+		int *mult, const char* filename) {
+
 	FILE *fp;
 	int vn,rn;
 	MTYPE a;
 	char rest, mode[3];
 	bool valid = 1;
 
-	fp = fopen("matrix.mt", "r");
+	fp = fopen(filename, "r");
+
 	fscanf(fp, " %[^\n]", mode);
 	fscanf(fp, " %d", &vn);	
+
 	initMatrix(C, 1, vn);
 	if(strcmp(mode,"min") == 0) *mult = -1;
 	for(int i = 0; i < vn; i++){
@@ -48,24 +52,31 @@ bool readMat(Matrix *C, Matrix *G, Matrix *CB, Matrix *B, Matrix *b, int *mult){
 		b->loc[i] = a;
 		if((rest == '>' && a > 0)|| rest == '=') valid = 0;
 	}
+
 	fclose(fp);
 
 	return valid;
 }
 
-int main() {
+int main(int argc, char const* argv[]) {
+
+	if ( argc != 2 ) {
+		printf("Usage: ./main FILENAME\n");
+		return 1;
+	}
+
+	const char* filename = argv[1];
 
 	Matrix G, C, b, CB, B;
 	int mult = 1;
 	bool valid;
 
-	valid = readMat(&C,&G,&CB,&B,&b,&mult);
-	if(valid){
+	valid = readMat(&C,&G,&CB,&B,&b,&mult, filename);
+
+	if ( valid )
 		simplex(G, C, B, CB, b, mult);
-	}
-	else {
+	else 
 		printf("Por favor ingrese una base inicial factible!");
-	}
 
 	freeMatrix(&G);
 	freeMatrix(&C);
@@ -75,3 +86,28 @@ int main() {
 
 	return 0;
 }
+
+/*
+	 int main() {
+
+	 Matrix G, C, b, CB, B;
+	 int mult = 1;
+	 bool valid;
+
+	 valid = readMat(&C,&G,&CB,&B,&b,&mult);
+	 if(valid){
+	 simplex(G, C, B, CB, b, mult);
+	 }
+	 else {
+	 printf("Por favor ingrese una base inicial factible!");
+	 }
+
+	 freeMatrix(&G);
+	 freeMatrix(&C);
+	 freeMatrix(&b);
+	 freeMatrix(&CB);
+	 freeMatrix(&B);
+
+	 return 0;
+	 }
+	 */
