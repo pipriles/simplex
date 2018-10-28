@@ -87,27 +87,3 @@ int main(int argc, char const* argv[]) {
 	return 0;
 }
 
-/*
-	 int main() {
-
-	 Matrix G, C, b, CB, B;
-	 int mult = 1;
-	 bool valid;
-
-	 valid = readMat(&C,&G,&CB,&B,&b,&mult);
-	 if(valid){
-	 simplex(G, C, B, CB, b, mult);
-	 }
-	 else {
-	 printf("Por favor ingrese una base inicial factible!");
-	 }
-
-	 freeMatrix(&G);
-	 freeMatrix(&C);
-	 freeMatrix(&b);
-	 freeMatrix(&CB);
-	 freeMatrix(&B);
-
-	 return 0;
-	 }
-	 */
